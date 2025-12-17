@@ -1,3 +1,5 @@
+docker run -d -p 8080:3000 --shm-size=2g linuxserver/webtop:ubuntu-xfce
+
 
 # 1. Limpiar contenedores viejos y arrancar el nuevo con privilegios
 docker rm -f anydesk_pc 2>/dev/null
