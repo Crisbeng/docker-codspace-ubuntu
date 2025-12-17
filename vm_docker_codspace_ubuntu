@@ -1,0 +1,22 @@
+
+# 1. Limpiar contenedores viejos y arrancar el nuevo con privilegios
+docker rm -f anydesk_pc 2>/dev/null
+docker run -d \
+  --name=anydesk_pc \
+  --privileged \
+  -p 8080:3000 \
+  --shm-size=2g \
+  linuxserver/webtop:ubuntu-xfce
+
+echo "⏳ Esperando a que el sistema inicie (10 seg)..."
+sleep 10
+
+# 2. Instalar dependencias y AnyDesk automáticamente dentro del contenedor
+echo "🚀 Instalando AnyDesk... (esto tarda un minuto)"
+docker exec -u 0 anydesk_pc bash -c "apt-get update >/dev/null 2>&1 && \
+ apt-get install -y wget libpango-1.0-0 >/dev/null 2>&1 && \
+ wget -qO anydesk.deb https://download.anydesk.com/linux/anydesk_6.3.2-1_amd64.deb && \
+ apt-get install -y ./anydesk.deb >/dev/null 2>&1"
+
+echo "✅ ¡LISTO! Abre la Vista Previa en el puerto 8080."
+echo "👉 Dentro del escritorio visual, ve al Menú > Internet > AnyDesk."
